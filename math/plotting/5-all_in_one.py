@@ -59,7 +59,8 @@ def all_in_one():
 
     # 3 - two decays
     ax4.plot(x3, y31, 'r--', x3, y32, 'green')
-    ax4.set_title('Exponential Decay of Radioactive Elements', fontsize='x-small')
+    ax4.set_title('Exponential Decay of Radioactive Elements',
+                  fontsize='x-small')
     ax4.set_xlabel('Time (years)', fontsize='x-small')
     ax4.set_ylabel('Fraction Remaining', fontsize='x-small')
     ax4.set_xlim(0, 20000)
