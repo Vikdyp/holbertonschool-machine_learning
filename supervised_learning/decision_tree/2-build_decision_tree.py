@@ -55,11 +55,16 @@ class Node:
         return "\n".join(new_lines)
 
     def right_child_add_prefix(self, text):
-        """Prefix a subtree string as a right child."""
+        """
+        Prefix a subtree string as a right child.
+
+        Important: do NOT indent subsequent lines, otherwise the right subtree
+        shifts and the expected ASCII layout breaks.
+        """
         lines = text.split("\n")
         new_lines = ["+--" + lines[0]]
         for line in lines[1:]:
-            new_lines.append("  " + line)
+            new_lines.append(line)
         return "\n".join(new_lines)
 
     def __str__(self):
