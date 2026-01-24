@@ -2,7 +2,8 @@
 """
 Decision tree building blocks: Node, Leaf, and Decision_Tree.
 
-Task 2: implement __str__ methods to print the tree structure.
+Task 2: implement __str__ methods to print the tree structure
+using the exact prefix style provided in the statement.
 """
 
 import numpy as np
@@ -47,34 +48,39 @@ class Node:
         return 1 + left_count + right_count
 
     def left_child_add_prefix(self, text):
-        """Prefix a subtree string as a left child."""
+        """Add the left-child ASCII prefix (exactly as provided)."""
         lines = text.split("\n")
-        new_lines = ["+--" + lines[0]]
-        for line in lines[1:]:
-            new_lines.append("| " + line)
-        return "\n".join(new_lines)
+        new_text = "    +--" + lines[0] + "\n"
+        for x in lines[1:]:
+            new_text += ("    |  " + x) + "\n"
+        return new_text
 
     def right_child_add_prefix(self, text):
-        """Prefix a subtree string as a right child."""
+        """Add the right-child ASCII prefix (symmetric to left)."""
         lines = text.split("\n")
-        new_lines = ["+--" + lines[0]]
-        for line in lines[1:]:
-            new_lines.append("  " + line)
-        return "\n".join(new_lines)
+        new_text = "    +--" + lines[0] + "\n"
+        for x in lines[1:]:
+            new_text += ("       " + x) + "\n"
+        return new_text
 
     def __str__(self):
         """Return an ASCII representation of the subtree rooted at this node."""
         if self.is_root:
-            head = f"root [feature={self.feature}, threshold={self.threshold}]"
+            text = f"root [feature={self.feature}, threshold={self.threshold}]"
         else:
-            head = f"-> node [feature={self.feature}, threshold={self.threshold}]"
+            text = f"-> node [feature={self.feature}, threshold={self.threshold}]"
 
         if self.left_child is None or self.right_child is None:
-            return head
+            return text
 
-        left_txt = self.left_child_add_prefix(str(self.left_child))
-        right_txt = self.right_child_add_prefix(str(self.right_child))
-        return "\n".join([head, left_txt, right_txt])
+        left_str = self.left_child.__str__()
+        right_str = self.right_child.__str__()
+
+        text += "\n"
+        text += self.left_child_add_prefix(left_str)
+        text += self.right_child_add_prefix(right_str)
+
+        return text.rstrip("\n")
 
 
 class Leaf(Node):
@@ -96,7 +102,7 @@ class Leaf(Node):
         return 1
 
     def __str__(self):
-        """Return the printable representation of a leaf."""
+        """String representation of a leaf (provided in the statement)."""
         return f"-> leaf [value={self.value}]"
 
 
@@ -123,17 +129,9 @@ class Decision_Tree:
         return self.root.max_depth_below()
 
     def count_nodes(self, only_leaves=False):
-        """
-        Count nodes in the tree.
-
-        Args:
-            only_leaves (bool): if True, count only leaves
-
-        Returns:
-            int: number of nodes or leaves
-        """
+        """Count nodes or leaves in the tree."""
         return self.root.count_nodes_below(only_leaves=only_leaves)
 
     def __str__(self):
-        """Return the printable representation of the whole tree."""
+        """String representation of the whole tree (provided)."""
         return self.root.__str__()
