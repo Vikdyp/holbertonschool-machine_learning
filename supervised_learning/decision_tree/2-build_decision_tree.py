@@ -55,16 +55,11 @@ class Node:
         return "\n".join(new_lines)
 
     def right_child_add_prefix(self, text):
-        """
-        Prefix a subtree string as a right child.
-
-        Important: do NOT indent subsequent lines, otherwise the right subtree
-        shifts and the expected ASCII layout breaks.
-        """
+        """Prefix a subtree string as a right child."""
         lines = text.split("\n")
         new_lines = ["+--" + lines[0]]
         for line in lines[1:]:
-            new_lines.append(line)
+            new_lines.append("  " + line)
         return "\n".join(new_lines)
 
     def __str__(self):
@@ -141,4 +136,4 @@ class Decision_Tree:
 
     def __str__(self):
         """Return the printable representation of the whole tree."""
-        return str(self.root)
+        return self.root.__str__()
