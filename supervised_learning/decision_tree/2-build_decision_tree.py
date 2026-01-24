@@ -3,7 +3,6 @@
 Decision tree building blocks: Node, Leaf, and Decision_Tree.
 
 Task 2: implement __str__ methods to print the tree structure.
-Includes helper prefix functions for left/right children.
 """
 
 import numpy as np
@@ -28,10 +27,8 @@ class Node:
         """Return the maximum depth found in the subtree below this node."""
         if self.left_child is None or self.right_child is None:
             return self.depth
-
-        left_depth = self.left_child.max_depth_below()
-        right_depth = self.right_child.max_depth_below()
-        return max(left_depth, right_depth)
+        return max(self.left_child.max_depth_below(),
+                   self.right_child.max_depth_below())
 
     def count_nodes_below(self, only_leaves=False):
         """
@@ -45,46 +42,39 @@ class Node:
         """
         left_count = self.left_child.count_nodes_below(only_leaves)
         right_count = self.right_child.count_nodes_below(only_leaves)
-
         if only_leaves:
             return left_count + right_count
         return 1 + left_count + right_count
 
     def left_child_add_prefix(self, text):
-        """Add the left-child ASCII prefix to a multi-line subtree string."""
+        """Prefix a subtree string as a left child."""
         lines = text.split("\n")
-        new_text = "    +--" + lines[0] + "\n"
+        new_lines = ["+--" + lines[0]]
         for line in lines[1:]:
-            new_text += "    |  " + line + "\n"
-        return new_text
+            new_lines.append("| " + line)
+        return "\n".join(new_lines)
 
     def right_child_add_prefix(self, text):
-        """Add the right-child ASCII prefix to a multi-line subtree string."""
+        """Prefix a subtree string as a right child."""
         lines = text.split("\n")
-        new_text = "    +--" + lines[0] + "\n"
+        new_lines = ["+--" + lines[0]]
         for line in lines[1:]:
-            new_text += "       " + line + "\n"
-        return new_text
+            new_lines.append("  " + line)
+        return "\n".join(new_lines)
 
     def __str__(self):
         """Return an ASCII representation of the subtree rooted at this node."""
         if self.is_root:
-            header = (f"root [feature={self.feature}, "
-                      f"threshold={self.threshold}]")
+            head = f"root [feature={self.feature}, threshold={self.threshold}]"
         else:
-            header = (f"-> node [feature={self.feature}, "
-                      f"threshold={self.threshold}]")
+            head = f"-> node [feature={self.feature}, threshold={self.threshold}]"
 
         if self.left_child is None or self.right_child is None:
-            return header
+            return head
 
-        left_str = str(self.left_child)
-        right_str = str(self.right_child)
-
-        text = header + "\n"
-        text += self.left_child_add_prefix(left_str)
-        text += self.right_child_add_prefix(right_str)
-        return text
+        left_txt = self.left_child_add_prefix(str(self.left_child))
+        right_txt = self.right_child_add_prefix(str(self.right_child))
+        return "\n".join([head, left_txt, right_txt])
 
 
 class Leaf(Node):
