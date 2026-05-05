@@ -21,7 +21,7 @@ class Node:
 
     def left_child_add_prefix(self, text):
         """Add the visual prefix for a left child subtree."""
-        lines = text.split("\n")
+        lines = text.rstrip("\n").split("\n")
         new_text = "    +--" + lines[0] + "\n"
         for line in lines[1:]:
             new_text += "    |  " + line + "\n"
@@ -29,7 +29,7 @@ class Node:
 
     def right_child_add_prefix(self, text):
         """Add the visual prefix for a right child subtree."""
-        lines = text.split("\n")
+        lines = text.rstrip("\n").split("\n")
         new_text = "    +--" + lines[0] + "\n"
         for line in lines[1:]:
             new_text += "       " + line + "\n"
@@ -46,7 +46,7 @@ class Node:
         text += f"threshold={self.threshold}]\n"
         text += self.left_child_add_prefix(self.left_child.__str__())
         text += self.right_child_add_prefix(self.right_child.__str__())
-        return text[:-1]
+        return text
 
 
 class Leaf(Node):
