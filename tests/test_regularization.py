@@ -241,7 +241,8 @@ class TestRegularization(unittest.TestCase):
         class VarianceScaling:
             """Record the requested initializer mode."""
 
-            def __init__(self, mode):
+            def __init__(self, scale, mode):
+                self.scale = scale
                 self.mode = mode
 
         class Dense:
@@ -301,6 +302,7 @@ class TestRegularization(unittest.TestCase):
         self.assertEqual(result["value"]["previous"], "previous")
         self.assertEqual(result["value"]["units"], 5)
         self.assertEqual(result["value"]["activation"], "tanh")
+        self.assertEqual(result["value"]["initializer"].scale, 2.0)
         self.assertEqual(result["value"]["initializer"].mode, "fan_avg")
 
     def test_early_stopping_resets_or_advances_patience(self):
