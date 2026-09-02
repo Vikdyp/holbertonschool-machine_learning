@@ -81,7 +81,17 @@ class TestRegularization(unittest.TestCase):
         self.assertTrue(
             (PROJECT_DIR / filename).is_file(), f"{filename} missing"
         )
-        module = load_module(filename)
+        source = (PROJECT_DIR / filename).read_text(encoding="utf-8")
+        self.assertIn("import tensorflow as tf", source)
+        old_tensorflow = sys.modules.get("tensorflow")
+        sys.modules["tensorflow"] = types.SimpleNamespace()
+        try:
+            module = load_module(filename)
+        finally:
+            if old_tensorflow is None:
+                sys.modules.pop("tensorflow", None)
+            else:
+                sys.modules["tensorflow"] = old_tensorflow
 
         class ModelWithLosses:
             """Expose the Keras model.losses contract used by the task."""
