@@ -112,7 +112,8 @@ class TestRegularization(unittest.TestCase):
         class VarianceScaling:
             """Record the requested initializer mode."""
 
-            def __init__(self, mode):
+            def __init__(self, scale, mode):
+                self.scale = scale
                 self.mode = mode
 
         class L2:
@@ -162,6 +163,7 @@ class TestRegularization(unittest.TestCase):
         self.assertEqual(previous, "previous")
         self.assertEqual(configuration["units"], 7)
         self.assertEqual(configuration["activation"], "relu")
+        self.assertEqual(configuration["initializer"].scale, 2.0)
         self.assertEqual(configuration["initializer"].mode, "fan_avg")
         self.assertEqual(configuration["regularizer"].coefficient, 0.3)
 
