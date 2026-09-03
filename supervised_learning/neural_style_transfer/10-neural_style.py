@@ -191,4 +191,7 @@ class NST:
     @staticmethod
     def variational_cost(generated_image):
         """Sum absolute differences between neighboring image pixels."""
+        if (not isinstance(generated_image, (tf.Tensor, tf.Variable))
+                or generated_image.shape.rank not in (3, 4)):
+            raise TypeError('image must be a tensor of rank 3 or 4')
         return tf.reduce_sum(tf.image.total_variation(generated_image))
