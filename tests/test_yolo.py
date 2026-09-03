@@ -53,19 +53,19 @@ class YoloTests(unittest.TestCase):
         self.assertIs(yolo.anchors, self.yolo.anchors)
 
     def test_decode_rectangular_grid_and_multiple_outputs(self):
-        """Zero logits have known centers, anchor extents and probabilities."""
+        """Decode with the exercise's width-first model-dimension contract."""
         outputs = [np.zeros((2, 4, 1, 7)), np.zeros((1, 1, 1, 7))]
         boxes, confidences, probabilities = self.yolo.process_outputs(
             outputs, np.array([160, 320]))
-        np.testing.assert_allclose(boxes[0][0, 0, 0], [0, 20, 80, 60])
+        np.testing.assert_allclose(boxes[0][0, 0, 0], [-40, 30, 120, 50])
         np.testing.assert_allclose(boxes[0][1, 3, 0],
-                                   [240, 100, 320, 140])
-        np.testing.assert_allclose(boxes[1][0, 0, 0], [80, 40, 240, 120])
+                                   [200, 110, 360, 130])
+        np.testing.assert_allclose(boxes[1][0, 0, 0], [0, 60, 320, 100])
         np.testing.assert_allclose(confidences[0], .5)
         np.testing.assert_allclose(probabilities[1], .5)
         outputs[0][0, 0, 0, 2:4] = np.log([2, 3])
         boxes, _, _ = self.yolo.process_outputs(outputs, [160, 320])
-        np.testing.assert_allclose(boxes[0][0, 0, 0], [-40, -20, 120, 100])
+        np.testing.assert_allclose(boxes[0][0, 0, 0], [-120, 10, 200, 70])
 
     def test_filter_threshold_and_empty_result_shapes(self):
         """Scores multiply object confidence by the strongest class score."""
@@ -125,8 +125,8 @@ class YoloTests(unittest.TestCase):
         self.yolo.model.predict = Mock(return_value=np.zeros((2, 1, 1, 1, 7)))
         predictions, returned_paths = self.yolo.predict('samples')
         self.assertEqual(returned_paths, paths)
-        np.testing.assert_allclose(predictions[0][0], [[15, 7.5, 25, 12.5]])
-        np.testing.assert_allclose(predictions[1][0], [[30, 15, 50, 25]])
+        np.testing.assert_allclose(predictions[0][0], [[10, 8.75, 30, 11.25]])
+        np.testing.assert_allclose(predictions[1][0], [[20, 17.5, 60, 22.5]])
         self.assertEqual(self.yolo.show_boxes.call_count, 2)
         self.assertEqual([call.args[-1] for call in
                           self.yolo.show_boxes.call_args_list],

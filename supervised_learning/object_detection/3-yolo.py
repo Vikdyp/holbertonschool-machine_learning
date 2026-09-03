@@ -19,7 +19,7 @@ class Yolo:
 
     def process_outputs(self, outputs, image_size):
         """Decode model logits into original-image boxes and probabilities."""
-        input_h, input_w = self.model.input_shape[1:3]
+        input_w, input_h = self.model.input_shape[1:3]
         image_h, image_w = image_size
         boxes, box_confidences, box_class_probs = [], [], []
         for index, output in enumerate(outputs):
