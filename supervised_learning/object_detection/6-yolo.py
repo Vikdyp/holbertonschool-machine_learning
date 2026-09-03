@@ -106,7 +106,7 @@ class Yolo:
 
     def preprocess_images(self, images):
         """Resize images with cubic interpolation and normalize pixels."""
-        input_h, input_w = self.model.input_shape[1:3]
+        input_w, input_h = self.model.input_shape[1:3]
         pimages, image_shapes = [], []
         for image in images:
             image_shapes.append(image.shape[:2])

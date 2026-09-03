@@ -109,10 +109,10 @@ class YoloTests(unittest.TestCase):
             for image, path in zip(images, paths):
                 np.testing.assert_array_equal(image, cv2.imread(path))
             resized, shapes = self.yolo.preprocess_images(images)
-        self.assertEqual(resized.shape, (2, 40, 80, 3))
+        self.assertEqual(resized.shape, (2, 80, 40, 3))
         for index, image in enumerate(images):
             np.testing.assert_array_equal(shapes[index], image.shape[:2])
-            np.testing.assert_allclose(resized[index, 20, 40],
+            np.testing.assert_allclose(resized[index, 40, 20],
                                        image[0, 0] / 255.0)
 
     def test_prediction_pairs_model_outputs_with_original_images(self):
