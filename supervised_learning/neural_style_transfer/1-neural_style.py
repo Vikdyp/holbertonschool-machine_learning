@@ -58,8 +58,6 @@ class NST:
                 output = layer(output)
             if layer.name in self.style_layers + [self.content_layer]:
                 features[layer.name] = output
-            if layer.name == self.content_layer:
-                break
         outputs = [features[name] for name in self.style_layers]
         outputs.append(features[self.content_layer])
         self.model = tf.keras.Model(base.input, outputs)
