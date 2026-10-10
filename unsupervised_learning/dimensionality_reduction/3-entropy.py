@@ -5,8 +5,11 @@ import numpy as np
 
 def HP(Di, beta):
     """Return bit entropy and normalized affinities for one observation."""
-    probabilities = np.exp(-(Di - np.min(Di)) * beta)
+    probabilities = np.exp(-Di * beta)
     total = np.sum(probabilities)
+    if total < np.finfo(probabilities.dtype).tiny * Di.size:
+        probabilities = np.exp(-(Di - np.min(Di)) * beta)
+        total = np.sum(probabilities)
     Pi = probabilities / total
     positive = Pi > 0
     Hi = -np.sum(Pi[positive] * np.log2(Pi[positive]))
