@@ -8,7 +8,7 @@ def maximization(X, g):
     if (not isinstance(X, np.ndarray) or X.ndim != 2 or 0 in X.shape
             or not isinstance(g, np.ndarray) or g.ndim != 2
             or g.shape[0] == 0 or g.shape[1] != X.shape[0]
-            or np.any(g < 0) or not np.allclose(np.sum(g, axis=0), 1)):
+            or not np.allclose(np.sum(g, axis=0), 1)):
         return None, None, None
     counts = np.sum(g, axis=1)
     if np.any(counts == 0):
