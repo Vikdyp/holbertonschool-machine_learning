@@ -26,4 +26,4 @@ class MultiNormal:
         centered = x - self.mean
         exponent = (centered.T @ np.linalg.inv(self.cov) @ centered).item()
         denominator = np.sqrt((2 * np.pi) ** d * np.linalg.det(self.cov))
-        return np.exp(-0.5 * exponent) / denominator
+        return (1 / denominator) * np.exp(-0.5 * exponent)
